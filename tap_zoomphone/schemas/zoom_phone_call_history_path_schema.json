@@ -419,25 +419,15 @@
           "event": {
             "type": "string",
             "description": "An event within a call log.",
-            "example": "outgoing",
+            "example": "outgoing"
+          },
+          "international": {
+            "type": "boolean",
+            "description": "A flag to indicate the call is international or not.",
+            "example": false,
             "enum": [
-              "incoming",
-              "outgoing",
-              "forward",
-              "ring_to_member",
-              "overflow",
-              "direct_transfer",
-              "barge",
-              "monitor",
-              "whisper",
-              "listen",
-              "takeover",
-              "conference_barge",
-              "park",
-              "timeout",
-              "park_pick_up",
-              "merge",
-              "shared"
+              true,
+              false
             ]
           },
           "result": {
@@ -549,9 +539,14 @@
             "description": "The call hold time in seconds.",
             "example": 20
           },
-          "waiting_time": {
+          "wait_time": {
             "type": "integer",
             "description": "The call wait time in seconds.",
+            "example": 20
+          },
+          "talk_time": {
+            "type": "integer",
+            "description": "The call talk time in seconds.",
             "example": 20
           },
           "voicemail_id": {
