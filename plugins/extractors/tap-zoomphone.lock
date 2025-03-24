@@ -1,0 +1,46 @@
+{
+  "plugin_type": "extractors",
+  "name": "tap-zoomphone",
+  "namespace": "tap_zoomphone",
+  "label": "tap-zoomphone",
+  "pip_url": "-e .",
+  "capabilities": [
+    "state",
+    "catalog",
+    "discover",
+    "about",
+    "stream-maps"
+  ],
+  "settings_group_validation": [
+    [
+      "client_id",
+      "client_secret",
+      "account_id"
+    ]
+  ],
+  "settings": [
+    {
+      "name": "client_id",
+      "label": "Client Id",
+      "description": "oAuth ClientId for authentication"
+    },
+    {
+      "name": "client_secret",
+      "kind": "string",
+      "label": "Client Secret",
+      "description": "oAuth Client Secret for authentication",
+      "sensitive": true
+    },
+    {
+      "name": "start_date",
+      "kind": "date_iso8601",
+      "label": "Start Date",
+      "description": "Initial date to start extracting data from"
+    },
+    {
+      "name": "account_id",
+      "label": "Zoom Account Id",
+      "description": "Zoom Account Id to access APIs"
+    }
+  ]
+}

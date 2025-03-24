@@ -1,0 +1,80 @@
+{
+    "properties": {
+        "last_access_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The last send or receive time in UTC.",
+            "example": "2022-03-25T02:11:27Z"
+        },
+        "participants": {
+            "maxItems": 10,
+            "type": "array",
+            "description": "The SMS members.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "display_name": {
+                        "type": "string",
+                        "description": "The participant name.",
+                        "example": "test api"
+                    },
+                    "owner": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "description": "The owner ID.",
+                                "example": "DnEopNmXQEGU2uvvzjgojw"
+                            },
+                            "type": {
+                                "type": "string",
+                                "description": "The owner type:\n*`user`\n*`callQueue`\n*`autoReceptionist`\n*`sharedLineGroup`",
+                                "example": "user",
+                                "enum": [
+                                    "user",
+                                    "callQueue",
+                                    "autoReceptionist",
+                                    "sharedLineGroup"
+                                ]
+                            }
+                        }
+                    },
+                    "phone_number": {
+                        "type": "string",
+                        "description": "The participant phone number.",
+                        "example": "18108001001"
+                    },
+                    "is_session_owner": {
+                        "type": "boolean",
+                        "description": "Whether it is the owner of the session.",
+                        "example": true
+                    },
+                    "extension_status": {
+                        "type": "string",
+                        "description": "This field indicates the status of the extension. \n* `inactive` \n* `deleted`",
+                        "example": "deleted",
+                        "enum": [
+                            "inactive",
+                            "deleted"
+                        ]
+                    },
+                    "extension_deleted_time": {
+                        "type": "string",
+                        "description": "The date time the extension was deleted. It exists only when extension_status is `deleted`.",
+                        "example": "2022-10-14T22:10:54Z"
+                    }
+                }
+            }
+        },
+        "session_id": {
+            "type": "string",
+            "description": "The SMS session ID.",
+            "example": "d39fc7e14ef9f2b6453f5f02524d79a2"
+        },
+        "session_type": {
+            "type": "string",
+            "description": "The session type.\nThe value for this field can be one of the following:  \n `user`  \n `call_queue`  \n `auto_receptionist`",
+            "example": "user"
+        }
+    }
+}

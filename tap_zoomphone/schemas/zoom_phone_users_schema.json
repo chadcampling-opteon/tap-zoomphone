@@ -1,0 +1,109 @@
+{
+  "properties": {
+    "calling_plans": {
+      "maxItems": 150,
+      "type": ["array","null"],
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the user's calling plan.",
+            "example": "US/CA Metered Calling Plan"
+          },
+          "type": {
+            "type": "integer",
+            "description": "The type of calling plan where the user is enrolled.",
+            "example": 100
+          },
+          "billing_account_id": {
+            "type": "string",
+            "description": "The billing account ID. It displays when the user is located in India.",
+            "example": "3WWAEiEjTj2IQuyDiKMd_A"
+          },
+          "billing_account_name": {
+            "type": "string",
+            "description": "The billing account name. It displays when the user is located in India.",
+            "example": "Delhi billing"
+          }
+        }
+      }
+    },
+    "email": {
+      "type": "string",
+      "description": "The email address of the user.",
+      "format": "email",
+      "example": "202007160003@testapi.com"
+    },
+    "extension_id": {
+      "type": "string",
+      "description": "The extension ID.",
+      "example": "V4UobpuxRxCwN_8iNf7k4w"
+    },
+    "extension_number": {
+      "type": "integer",
+      "description": "The extension number assigned to the user's Zoom phone number.",
+      "format": "int64",
+      "example": 1000001036
+    },
+    "id": {
+      "type": "string",
+      "description": "The unique identifier of the user (userId).",
+      "example": "w0RChiauQeqRlv5fgxYULQ"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the user.",
+      "example": "APITA AUTO"
+    },
+    "phone_user_id": {
+      "type": "string",
+      "description": "The Zoom phone identifier of the user.",
+      "example": "BOSr0vUiTl61WLR-Q_7bUw"
+    },
+    "site_id": {
+      "type": ["string", "null"],
+      "description": "The unique identifier of the [site](https://support.zoom.us/hc/en-us/articles/360020809672-Managing-Multiple-Sites).",
+      "example": "IjJ2D75SQJit1VdDvkK_mQ"
+    },
+    "site_name": {
+      "type": ["string", "null"],
+      "description": "The name of the site.",
+      "example": "ApiTA_Site_2020_07_12_02_33_45_707"
+    },
+    "status": {
+      "type": "string",
+      "description": "The status of the user's Zoom Phone license. The value can be either of the following:  \n \n`activate`: Active Zoom phone user.  \n \n`deactivate`: User with Zoom phone license disabled. This type of user can't make or receive calls.",
+      "example": "activate"
+    },
+    "phone_numbers": {
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The phone number ID.",
+            "example": "---M1padRvSUtw7YihN7sA"
+          },
+          "number": {
+            "type": "string",
+            "description": "The phone number.",
+            "example": "14232058798"
+          }
+        }
+      }
+    },
+    "department": {
+      "type": ["string", "null"],
+      "description": "The department where the user belongs.",
+      "example": "Phone department"
+    },
+    "cost_center": {
+      "type": ["string", "null"],
+      "description": "The cost center where the user belongs.",
+      "example": "Phone cost center"
+    }
+  }
+}

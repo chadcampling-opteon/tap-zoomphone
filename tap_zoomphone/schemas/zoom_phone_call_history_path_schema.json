@@ -1,0 +1,566 @@
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The ID of the call log.",
+      "example": "48c1dfd4-91ce-4df5-8495-7c9e33d10869"
+    },
+    "call_id": {
+      "type": "string",
+      "description": "The ID of the phone call.",
+      "example": "7018317023722949162"
+    },
+    "connect_type": {
+      "type": "string",
+      "description": "The connect type of call: \n* `internal` \n* `external`",
+      "example": "internal",
+      "enum": [
+        "internal",
+        "external"
+      ]
+    },
+    "call_type": {
+      "type": "string",
+      "description": "The type of call. \n* `general` \n* `emergency` ",
+      "example": "general",
+      "enum": [
+        "general",
+        "emergency"
+      ]
+    },
+    "direction": {
+      "type": "string",
+      "description": "The direction of the call. \n* `inbound` \n* `outbound` ",
+      "example": "inbound",
+      "enum": [
+        "inbound",
+        "outbound"
+      ]
+    },
+    "international": {
+      "type": "boolean",
+      "description": "A flag to indicate the call is international or not.",
+      "example": false,
+      "enum": [
+        true,
+        false
+      ]
+    },
+    "caller_ext_id": {
+      "type": "string",
+      "description": "The caller's extension ID.",
+      "example": "ATu63--9TjudZetpf4UuQg"
+    },
+    "caller_name": {
+      "type": "string",
+      "description": "The name of the caller.",
+      "example": "Caller name"
+    },
+    "caller_did_number": {
+      "type": "string",
+      "description": "The caller's DID number in e164 format.",
+      "example": "+12059300920"
+    },
+    "caller_ext_number": {
+      "type": "string",
+      "description": "The extension number of the caller.",
+      "example": "101229"
+    },
+    "caller_email": {
+      "type": "string",
+      "description": "The caller's email.",
+      "example": "test@abc.com"
+    },
+    "caller_ext_type": {
+      "type": "string",
+      "description": "The caller's extension type: \n* `user` \n* `callQueue` \n* `autoReceptionist` \n* `commonArea` \n* `zoomRoom` \n* `ciscoRoom` \n* `sharedLineGroup` \n* `groupCallPickup` \n* `externalContact`.",
+      "example": "user",
+      "enum": [
+        "user",
+        "call_queue",
+        "auto_receptionist",
+        "common_area",
+        "zoom_room",
+        "cisco_room",
+        "shared_line_group",
+        "group_call_pickup",
+        "external_contact"
+      ]
+    },
+    "callee_ext_id": {
+      "type": "string",
+      "description": "The callee's extension ID.",
+      "example": "ATu63--9TjudZetpf4UuQg"
+    },
+    "callee_name": {
+      "type": "string",
+      "description": "The name of the callee.",
+      "example": "Callee name"
+    },
+    "callee_email": {
+      "type": "string",
+      "description": "The callee's email.",
+      "example": "test@abc.com"
+    },
+    "callee_did_number": {
+      "type": "string",
+      "description": "The callee's DID number in e164 format.",
+      "example": "+12059300920"
+    },
+    "callee_ext_number": {
+      "type": "string",
+      "description": "The extension number of the callee.",
+      "example": "101229"
+    },
+    "callee_ext_type": {
+      "type": "string",
+      "description": "The callee's extension type: \n* `user` \n* `callQueue` \n* `autoReceptionist` \n* `commonArea` \n* `zoomRoom` \n* `ciscoRoom` \n* `sharedLineGroup` \n* `groupCallPickup` \n* `externalContact`.",
+      "example": "user",
+      "enum": [
+        "user",
+        "call_queue",
+        "auto_receptionist",
+        "common_area",
+        "zoom_room",
+        "cisco_room",
+        "shared_line_group",
+        "group_call_pickup",
+        "external_contact"
+      ]
+    },
+    "department": {
+      "type": "string",
+      "description": "The name of the department of which the user belongs.",
+      "example": "web-api1"
+    },
+    "cost_center": {
+      "type": "string",
+      "description": "The name of the cost center of which the user belongs.",
+      "example": "cost-center1"
+    },
+    "site_id": {
+      "type": "string",
+      "description": "The name of the site ID of which the user belongs.",
+      "example": "BpCTBMRARBefUrprildVqw"
+    },
+    "group_id": {
+      "type": "string",
+      "description": "The primary group of which the user belongs.",
+      "example": "California"
+    },
+    "site_name": {
+      "type": "string",
+      "description": "The name of the site name of which the user belongs.",
+      "example": "site name"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The call start time in GMT `date-time` format.",
+      "example": "2021-10-08T16:12:04Z"
+    },
+    "answer_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The call answer time in GMT `date-time` format.",
+      "example": "2021-10-08T16:12:04Z"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The call end time in GMT `date-time` format.",
+      "example": "2021-10-08T16:12:15Z"
+    },
+    "call_path": {
+      "type": "array",
+      "description": "The call segment path.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the call log.",
+            "example": "48c1dfd4-91ce-4df5-8495-7c9e33d10869"
+          },
+          "call_id": {
+            "type": "string",
+            "description": "The ID of the phone call.",
+            "example": "7018317023722949162"
+          },
+          "connect_type": {
+            "type": "string",
+            "description": "The connect type of call: \n* `internal` \n* `external`",
+            "example": "internal",
+            "enum": [
+              "internal",
+              "external"
+            ]
+          },
+          "call_type": {
+            "type": "string",
+            "description": "The type of call. \n* `general` \n* `emergency` ",
+            "example": "general",
+            "enum": [
+              "general",
+              "emergency"
+            ]
+          },
+          "direction": {
+            "type": "string",
+            "description": "The direction of the call. \n* `inbound` \n* `outbound` ",
+            "example": "inbound",
+            "enum": [
+              "inbound",
+              "outbound"
+            ]
+          },
+          "caller_ext_id": {
+            "type": "string",
+            "description": "The caller's extension ID.",
+            "example": "ATu63--9TjudZetpf4UuQg"
+          },
+          "caller_name": {
+            "type": "string",
+            "description": "The name of the caller.",
+            "example": "Caller name"
+          },
+          "caller_email": {
+            "type": "string",
+            "description": "The caller's email.",
+            "example": "test@abc.com"
+          },
+          "caller_did_number": {
+            "type": "string",
+            "description": "The caller's DID number in e164 format.",
+            "example": "+12059300920"
+          },
+          "caller_ext_number": {
+            "type": "string",
+            "description": "The extension number of the caller.",
+            "example": "101229"
+          },
+          "caller_ext_type": {
+            "type": "string",
+            "description": "The caller's extension type: \n* `user` \n* `call_queue` \n* `auto_receptionist` \n* `common_area` \n* `zoom_room` \n* `cisco_room` \n* `shared_line_group` \n* `group_call_pickup` \n* `external_contact`.",
+            "example": "user",
+            "enum": [
+              "user",
+              "call_queue",
+              "auto_receptionist",
+              "common_area",
+              "zoom_room",
+              "cisco_room",
+              "shared_line_group",
+              "group_call_pickup",
+              "external_contact"
+            ]
+          },
+          "caller_number_type": {
+            "type": "string",
+            "description": "The caller's number type.",
+            "example": "external_pstn",
+            "enum": [
+              "zoom_pstn",
+              "zoom_toll_free_number",
+              "external_pstn",
+              "external_contact",
+              "byoc",
+              "byop",
+              "3rd_party_contact_center",
+              "zoom_service_number",
+              "external_service_number",
+              "zoom_contact_center",
+              "meeting_phone_number",
+              "meeting_id",
+              "anonymous_number",
+              "zra_phone_number"
+            ]
+          },
+          "caller_device_type": {
+            "type": "string",
+            "description": "The caller's device type.",
+            "example": "MAC_Client(6.0.2.33403)"
+          },
+          "caller_country_iso_code": {
+            "type": "string",
+            "description": "The caller's country ISO code.",
+            "example": "US"
+          },
+          "caller_country_code": {
+            "type": "string",
+            "description": "The caller's country code.",
+            "example": "US"
+          },
+          "callee_ext_id": {
+            "type": "string",
+            "description": "The callee's extension ID.",
+            "example": "ATu63--9TjudZetpf4UuQg"
+          },
+          "callee_name": {
+            "type": "string",
+            "description": "The name of the callee.",
+            "example": "Callee name"
+          },
+          "callee_did_number": {
+            "type": "string",
+            "description": "The callee's DID number in e164 format.",
+            "example": "+12059300920"
+          },
+          "callee_ext_number": {
+            "type": "string",
+            "description": "The extension number of the callee.",
+            "example": "101229"
+          },
+          "callee_email": {
+            "type": "string",
+            "description": "The callee's email.",
+            "example": "test@abc.com"
+          },
+          "callee_ext_type": {
+            "type": "string",
+            "description": "The callee's extension type: \n* `user` \n* `call_queue` \n* `auto_receptionist` \n* `common_area` \n* `zoom_room` \n* `cisco_room` \n* `shared_line_group` \n* `group_call_pickup` \n* `external_contact`.",
+            "example": "user",
+            "enum": [
+              "user",
+              "call_queue",
+              "auto_receptionist",
+              "common_area",
+              "zoom_room",
+              "cisco_room",
+              "shared_line_group",
+              "group_call_pickup",
+              "external_contact"
+            ]
+          },
+          "callee_number_type": {
+            "type": "string",
+            "description": "The callee's number type.",
+            "example": "external_pstn",
+            "enum": [
+              "zoom_pstn",
+              "zoom_toll_free_number",
+              "external_pstn",
+              "external_contact",
+              "byoc",
+              "byop",
+              "3rd_party_contact_center",
+              "zoom_service_number",
+              "external_service_number",
+              "zoom_contact_center",
+              "meeting_phone_number",
+              "meeting_id",
+              "anonymous_number",
+              "zra_phone_number"
+            ]
+          },
+          "callee_device_type": {
+            "type": "string",
+            "description": "The callee's device type.",
+            "example": "MAC_Client(6.0.2.33403)"
+          },
+          "callee_country_iso_code": {
+            "type": "string",
+            "description": "The callee's country ISO code.",
+            "example": "US"
+          },
+          "callee_country_code": {
+            "type": "string",
+            "description": "The callee's country code.",
+            "example": "US"
+          },
+          "client_code": {
+            "type": "string",
+            "description": "The client code for the call.",
+            "example": "1234"
+          },
+          "department": {
+            "type": "string",
+            "description": "The name of the department of which the user belongs.",
+            "example": "web-api1"
+          },
+          "cost_center": {
+            "type": "string",
+            "description": "The name of the cost center of which the user belongs.",
+            "example": "cost-center1"
+          },
+          "site_id": {
+            "type": "string",
+            "description": "The name of the site ID of which the user belongs.",
+            "example": "BpCTBMRARBefUrprildVqw"
+          },
+          "group_id": {
+            "type": "string",
+            "description": "The primary group of which the user belongs.",
+            "example": "California"
+          },
+          "site_name": {
+            "type": "string",
+            "description": "The name of the site name of which the user belongs.",
+            "example": "site name"
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The call start time in GMT `date-time` format.",
+            "example": "2021-10-08T16:12:04Z"
+          },
+          "answer_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The call answer time in GMT `date-time` format.",
+            "example": "2021-10-08T16:12:04Z"
+          },
+          "end_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The call end time in GMT `date-time` format.",
+            "example": "2021-10-08T16:12:15Z"
+          },
+          "event": {
+            "type": "string",
+            "description": "An event within a call log.",
+            "example": "outgoing",
+            "enum": [
+              "incoming",
+              "outgoing",
+              "forward",
+              "ring_to_member",
+              "overflow",
+              "direct_transfer",
+              "barge",
+              "monitor",
+              "whisper",
+              "listen",
+              "takeover",
+              "conference_barge",
+              "park",
+              "timeout",
+              "park_pick_up",
+              "merge",
+              "shared"
+            ]
+          },
+          "result": {
+            "type": "string",
+            "description": "The detail result of an event for a call log.",
+            "example": "answered",
+            "enum": [
+              "answered",
+              "accepted",
+              "picked_up",
+              "connected",
+              "succeeded",
+              "voicemail",
+              "canceled",
+              "call_failed",
+              "rejected",
+              "busy",
+              "ring_timeout",
+              "overflowed",
+              "no_answer",
+              "invalid_key",
+              "abandoned",
+              "system_blocked",
+              "service_unavailable"
+            ]
+          },
+          "result_reason": {
+            "type": "string",
+            "description": "The reason of result of an event for a call log.",
+            "example": "answered_by_other",
+            "enum": [
+              "answered_by_other",
+              "pickup_by_other",
+              "call_out_by_other"
+            ]
+          },
+          "device_private_ip": {
+            "type": "string",
+            "description": "The private IP of which the user belongs.",
+            "example": ""
+          },
+          "device_public_ip": {
+            "type": "string",
+            "description": "The public IP of which the user belongs",
+            "example": ""
+          },
+          "operator_ext_number": {
+            "type": "string",
+            "description": "The operator extension number.",
+            "example": "3456"
+          },
+          "operator_ext_id": {
+            "type": "string",
+            "description": "The operator extension ID.",
+            "example": "NN9rA4fZSsScB2YiCqw7Ig"
+          },
+          "operator_ext_type": {
+            "type": "string",
+            "description": "The operator extension type.",
+            "example": "user",
+            "enum": [
+              "user",
+              "call_queue",
+              "auto_receptionist",
+              "common_area",
+              "zoom_room",
+              "cisco_room",
+              "shared_line_group",
+              "group_call_pickup",
+              "external_contact"
+            ]
+          },
+          "operator_name": {
+            "type": "string",
+            "description": "The operator's name.",
+            "example": "operator name"
+          },
+          "press_key": {
+            "type": "string",
+            "description": "The press key value for event press or input.",
+            "example": "3"
+          },
+          "segment": {
+            "type": "integer",
+            "description": "A sequential number to indicate the orders of events that starts from 0.",
+            "example": 0
+          },
+          "node": {
+            "type": "integer",
+            "description": "Within one segment, a sequential number to indicate the orders of the events that starts from 0.",
+            "example": 0
+          },
+          "is_node": {
+            "type": "integer",
+            "example": 0
+          },
+          "recording_id": {
+            "type": "string",
+            "description": "The unique identifier of the call recording.",
+            "example": "c71b360f6e774e3aa101453117b7e1a7"
+          },
+          "recording_type": {
+            "type": "string",
+            "description": "The type of call recording: \n* `ad-hoc`, \n* `automatic` ",
+            "example": "automatic"
+          },
+          "hold_time": {
+            "type": "integer",
+            "description": "The call hold time in seconds.",
+            "example": 20
+          },
+          "waiting_time": {
+            "type": "integer",
+            "description": "The call wait time in seconds.",
+            "example": 20
+          },
+          "voicemail_id": {
+            "type": "string",
+            "description": "The ID of the call voicemail.",
+            "example": "6cd2da01bcaa47f58e3250a575c5f2bf"
+          }
+        }
+      }
+    }
+  }
+}
