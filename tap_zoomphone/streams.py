@@ -71,9 +71,16 @@ class CallHistoryPathStream(ZoomPhoneStream):
     
     state_partitioning_keys = []
     _page_size = None
+    _LOG_REQUEST_METRICS = False
+
     
     def get_url(self, context):
         url = super().get_url(context)
         id = context["id"]
         return  f"{url}/{id}"
 
+    def _log_metric(self, point):
+        pass
+    
+    def _write_request_duration_log(self, endpoint, response, context, extra_tags):
+        pass

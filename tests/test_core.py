@@ -12,7 +12,6 @@ SAMPLE_CONFIG = {
 }
 
 TEST_SUITE_CONFIG = SuiteConfig(
-    #ignore_no_records_for_streams=["call_history_path"]
 )
 
 # Run standard built-in tap tests from the SDK:

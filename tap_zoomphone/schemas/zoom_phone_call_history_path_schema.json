@@ -47,32 +47,32 @@
       ]
     },
     "caller_ext_id": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The caller's extension ID.",
       "example": "ATu63--9TjudZetpf4UuQg"
     },
     "caller_name": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The name of the caller.",
       "example": "Caller name"
     },
     "caller_did_number": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The caller's DID number in e164 format.",
       "example": "+12059300920"
     },
     "caller_ext_number": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The extension number of the caller.",
       "example": "101229"
     },
     "caller_email": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The caller's email.",
       "example": "test@abc.com"
     },
     "caller_ext_type": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The caller's extension type: \n* `user` \n* `callQueue` \n* `autoReceptionist` \n* `commonArea` \n* `zoomRoom` \n* `ciscoRoom` \n* `sharedLineGroup` \n* `groupCallPickup` \n* `externalContact`.",
       "example": "user",
       "enum": [
@@ -88,32 +88,32 @@
       ]
     },
     "callee_ext_id": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The callee's extension ID.",
       "example": "ATu63--9TjudZetpf4UuQg"
     },
     "callee_name": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The name of the callee.",
       "example": "Callee name"
     },
     "callee_email": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The callee's email.",
       "example": "test@abc.com"
     },
     "callee_did_number": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The callee's DID number in e164 format.",
       "example": "+12059300920"
     },
     "callee_ext_number": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The extension number of the callee.",
       "example": "101229"
     },
     "callee_ext_type": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The callee's extension type: \n* `user` \n* `callQueue` \n* `autoReceptionist` \n* `commonArea` \n* `zoomRoom` \n* `ciscoRoom` \n* `sharedLineGroup` \n* `groupCallPickup` \n* `externalContact`.",
       "example": "user",
       "enum": [
@@ -129,12 +129,12 @@
       ]
     },
     "department": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The name of the department of which the user belongs.",
       "example": "web-api1"
     },
     "cost_center": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The name of the cost center of which the user belongs.",
       "example": "cost-center1"
     },
@@ -144,7 +144,7 @@
       "example": "BpCTBMRARBefUrprildVqw"
     },
     "group_id": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "The primary group of which the user belongs.",
       "example": "California"
     },
@@ -160,7 +160,7 @@
       "example": "2021-10-08T16:12:04Z"
     },
     "answer_time": {
-      "type": "string",
+      "type": ["string", "null"],
       "format": "date-time",
       "description": "The call answer time in GMT `date-time` format.",
       "example": "2021-10-08T16:12:04Z"

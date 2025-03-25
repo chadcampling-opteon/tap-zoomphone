@@ -83,7 +83,14 @@ class ZoomPhoneStream(RESTStream):
         context: Context | None,  # noqa: ARG002
         next_page_token: t.Any | None,  # noqa: ANN401
     ) -> dict[str, t.Any]:
-        """Return a dictionary of values to be used in URL parameterization.
+        """Returns query params for Zoom API supporting differing pagination
+        
+            - Next Page Token (UsersStream)
+            - Next Pase Token and Incremental From/To dates (SmsSessions, CallHistory)
+                - Call History endpoint returns page count in body and returns a next page token when there isn't any more pages
+                - Sms Sessions doens't have body data but will return a blank token
+                - Zoom only allow a date range within the same month requiring batching by month
+            - Single result page, handled with page_size of None on stream (CallHistoryPath)
 
         Args:
             context: The stream context.
@@ -95,7 +102,7 @@ class ZoomPhoneStream(RESTStream):
         params: dict = {}
         params["page_size"] = self._page_size
         if next_page_token:
-            if next_page_token["next_page_token"]:
+            if next_page_token["next_page_token"] and not next_page_token["last_page_in_batch"]:
                 params["next_page_token"] = next_page_token["next_page_token"]
                 if self._history_window:
                     params["from"] = next_page_token["last_from"]
@@ -128,6 +135,9 @@ class ZoomPhoneStream(RESTStream):
     
 class ZoomDateJsonPaginator(BaseAPIPaginator[t.Optional[dict]]):
     """Paginator class for APIs returning a pagination token in the response body."""
+    
+    # maintains page count in a date range batch
+    _sub_page_count = 0
 
     def __init__(
         self,
@@ -163,16 +173,44 @@ class ZoomDateJsonPaginator(BaseAPIPaginator[t.Optional[dict]]):
         last_from = req_params.get("from", [None])[0]
         last_to = req_params.get("to", [None])[0]
         
-        all_matches = extract_jsonpath(self._jsonpath, response.json())
+        response_json = response.json()
+        response_page_count = response_json.get("page_count")
+        
+        last_page_in_batch = self._sub_page_count == response_page_count
+        
+        self._last_seen_record = {
+            "page_count":response_page_count,
+            "last_page_in_batch":last_page_in_batch,
+            "last_to":last_to,
+        }
+        
+        all_matches = extract_jsonpath(self._jsonpath, response_json)
         next_page_token = next(all_matches, None)
         
-        if not last_from and not last_to and not next_page_token:
+        if not response_page_count and not next_page_token:
             return None
         
         result = {
             "next_page_token": next_page_token,
             "last_from": last_from,
-            "last_to": last_to
+            "last_to": last_to,
+            "last_page_in_batch": last_page_in_batch
         }
         
         return result
+    
+    def advance(self, response):
+        if self._last_seen_record and self._last_seen_record["last_page_in_batch"]:
+            # reset to page 1 for new batch
+            self._sub_page_count = 1
+        else:
+            self._sub_page_count += 1
+        return super().advance(response)
+    
+    def has_more(self, response):
+        if self._last_seen_record and self._sub_page_count == self._last_seen_record.get("page_count") and self._last_seen_record.get("last_to"):
+            # to date is in future and we're on last page, no more records
+            last_to_datetime = datetime.fromisoformat(self._last_seen_record["last_to"])
+            return last_to_datetime < datetime.now(timezone.utc)
+        
+        return True
