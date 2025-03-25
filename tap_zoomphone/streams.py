@@ -69,6 +69,7 @@ class CallHistoryPathStream(ZoomPhoneStream):
     parent_stream_type = CallHistoryStream
     ignore_parent_replication_key = False
     
+    state_partitioning_keys = []
     _page_size = None
     
     def get_url(self, context):
