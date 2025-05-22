@@ -451,7 +451,8 @@
               "invalid_key",
               "abandoned",
               "system_blocked",
-              "service_unavailable"
+              "service_unavailable",
+              "unconnected"
             ]
           },
           "result_reason": {
