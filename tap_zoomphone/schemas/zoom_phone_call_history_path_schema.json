@@ -462,7 +462,8 @@
             "enum": [
               "answered_by_other",
               "pickup_by_other",
-              "call_out_by_other"
+              "call_out_by_other",
+              "disconnect"
             ]
           },
           "device_private_ip": {
