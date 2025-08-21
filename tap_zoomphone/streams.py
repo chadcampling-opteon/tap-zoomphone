@@ -84,3 +84,9 @@ class CallHistoryPathStream(ZoomPhoneStream):
     
     def _write_request_duration_log(self, endpoint, response, context, extra_tags):
         pass
+    
+    def post_process(self, row, context = None):
+        """Zoom API has been returning items outside schema with training spaces"""
+        
+        result_reason = row.get('result_reason')
+        row['result_reason'] = result_reason.strip() if result_reason else None
