@@ -13,7 +13,7 @@ jobs:
     outputs:
       version: ${{ steps.baipp.outputs.package_version }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: hynek/build-and-inspect-python-package@v2
       id: baipp
 
@@ -29,7 +29,7 @@ jobs:
     #   url: https://pypi.org/project/tap-zoomphone/${{ steps.baipp.outputs.package_version }}
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v5
       with:
         name: Packages
         path: dist
