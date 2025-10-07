@@ -51,7 +51,11 @@ class ZoomPhoneStream(RESTStream):
         Returns:
             An authenticator instance.
         """
-        return ZoomPhoneAuthenticator.create_for_stream(self)
+        return ZoomPhoneAuthenticator(
+            client_id=self.config["client_id"],
+            client_secret=self.config["client_secret"],
+            account_id=self.config["account_id"]
+        )
 
     @property
     def http_headers(self) -> dict:
@@ -86,9 +90,9 @@ class ZoomPhoneStream(RESTStream):
         """Returns query params for Zoom API supporting differing pagination
         
             - Next Page Token (UsersStream)
-            - Next Pase Token and Incremental From/To dates (SmsSessions, CallHistory)
+            - Next Page Token and Incremental From/To dates (SmsSessions, CallHistory)
                 - Call History endpoint returns page count in body and returns a next page token when there isn't any more pages
-                - Sms Sessions doens't have body data but will return a blank token
+                - Sms Sessions doesn't have body data but will return a blank token
                 - Zoom only allow a date range within the same month requiring batching by month
             - Single result page, handled with page_size of None on stream (CallHistoryPath)
 

@@ -1,8 +1,14 @@
 """ZoomPhone Authentication."""
 
-from __future__ import annotations
+
+import sys
 
 from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
+
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
 
 
 # The SingletonMeta metaclass makes your streams reuse the same authenticator instance.
@@ -10,6 +16,7 @@ from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
 class ZoomPhoneAuthenticator(OAuthAuthenticator, metaclass=SingletonMeta):
     """Authenticator class for ZoomPhone."""
 
+    @override
     @property
     def oauth_request_body(self) -> dict:
         """Define the OAuth request body for the AutomaticTestTap API.
@@ -18,24 +25,27 @@ class ZoomPhoneAuthenticator(OAuthAuthenticator, metaclass=SingletonMeta):
             A dict with the request body
         """
         return {
-            "client_id": self.config["client_id"],
-            "client_secret": self.config["client_secret"],
-            "account_id": self.config["account_id"],
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "account_id": self._account_id,
             "grant_type": "account_credentials",
         }
 
-    @classmethod
-    def create_for_stream(cls, stream) -> ZoomPhoneAuthenticator:  # noqa: ANN001
-        """Instantiate an authenticator for a specific Singer stream.
-
+    def __init__(self, client_id: str = None, client_secret: str = None, account_id: str = None, **kwargs):
+        """Initialize the authenticator.
+        
         Args:
-            stream: The Singer stream instance.
-
-        Returns:
-            A new authenticator.
+            client_id: The OAuth client ID.
+            client_secret: The OAuth client secret.
+            account_id: The Zoom account ID.
+            **kwargs: Additional arguments passed to parent class.
         """
-        return cls(
-            stream=stream,
+        self._account_id = account_id
+        
+        return super().__init__(
             auth_endpoint="https://zoom.us/oauth/token",
             oauth_scopes="",
+            client_id=client_id,
+            client_secret=client_secret,
+            **kwargs
         )
