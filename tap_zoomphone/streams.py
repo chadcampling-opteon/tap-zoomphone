@@ -90,4 +90,15 @@ class CallHistoryPathStream(ZoomPhoneStream):
         
         result_reason = row.get('result_reason')
         row['result_reason'] = result_reason.strip() if result_reason else None
+
+        # Also clean up result_reason in each item of call_path array, if present
+        call_path = row.get('call_path')
+        if isinstance(call_path, list):
+            for i, item in enumerate(call_path):
+                if isinstance(item, dict):
+                    rr = item.get('result_reason')
+                    if rr is not None and isinstance(rr, str):
+                        item['result_reason'] = rr.strip()
+            # The list is already updated in-place, but to be explicit:
+            row['call_path'] = call_path
         return row
