@@ -90,3 +90,4 @@ class CallHistoryPathStream(ZoomPhoneStream):
         
         result_reason = row.get('result_reason')
         row['result_reason'] = result_reason.strip() if result_reason else None
+        return row
