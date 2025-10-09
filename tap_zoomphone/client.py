@@ -21,6 +21,7 @@ from singer_sdk.pagination import BaseAPIPaginator, SinglePagePaginator  # noqa:
 from singer_sdk.streams import RESTStream
 
 from tap_zoomphone.auth import ZoomPhoneAuthenticator
+from tap_zoomphone.pagination import ZoomDateJsonPaginator
 
 if t.TYPE_CHECKING:
     import requests
@@ -38,6 +39,19 @@ class ZoomPhoneStream(RESTStream):
 
     # Update this value if necessary or override `get_new_paginator`.
     next_page_token_jsonpath = "$.next_page_token"  # noqa: S105
+    
+    def __init__(self, *args, **kwargs):
+        """Initialize the stream with pagination strategy."""
+        super().__init__(*args, **kwargs)
+        self._pagination_strategy = self.get_pagination_strategy()
+    
+    def get_pagination_strategy(self):
+        """Return the default pagination strategy for this stream.
+        
+        Subclasses should override this method to provide their specific strategy.
+        """
+        from tap_zoomphone.pagination import TokenPaginationStrategy
+        return TokenPaginationStrategy(page_size=self._page_size)
 
     @property
     def url_base(self) -> str:
@@ -80,7 +94,11 @@ class ZoomPhoneStream(RESTStream):
             A pagination helper instance.
         """
         
-        return ZoomDateJsonPaginator(self.next_page_token_jsonpath, self.logger)
+        return ZoomDateJsonPaginator(
+            self.next_page_token_jsonpath, 
+            self.logger,
+            self._pagination_strategy
+        )
 
     def get_url_params(
         self,
@@ -103,25 +121,7 @@ class ZoomPhoneStream(RESTStream):
         Returns:
             A dictionary of URL query parameters.
         """    
-        params: dict = {}
-        params["page_size"] = self._page_size
-        if next_page_token:
-            if next_page_token["next_page_token"] and not next_page_token["last_page_in_batch"]:
-                params["next_page_token"] = next_page_token["next_page_token"]
-                if self._history_window:
-                    params["from"] = next_page_token["last_from"]
-                    params["to"] = next_page_token["last_to"]
-            elif self._history_window:
-                params["from"] = next_page_token["last_to"]
-                params["to"] = (datetime.fromisoformat(next_page_token["last_to"]) + relativedelta(months=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
-        elif self._history_window:
-            starting_date = self.get_starting_timestamp(context)
-            if not starting_date:
-                starting_date = (datetime.now(timezone.utc) + relativedelta(days=1) - self._history_window).replace(hour=0, minute=0, second=0, microsecond=0)
-            params["from"] = starting_date.strftime('%Y-%m-%dT%H:%M:%SZ')
-            params["to"] = (starting_date + relativedelta(months=1)).replace(day=1,hour=0, minute=0, second=0, microsecond=0).strftime('%Y-%m-%dT%H:%M:%SZ')
-            
-        return params
+        return self._pagination_strategy.get_url_params(context, next_page_token)
 
     def parse_response(self, response: requests.Response) -> t.Iterable[dict]:
         """Parse the response and return an iterator of result records.
@@ -136,85 +136,3 @@ class ZoomPhoneStream(RESTStream):
             self.records_jsonpath,
             input=response.json(parse_float=decimal.Decimal),
         )
-    
-class ZoomDateJsonPaginator(BaseAPIPaginator[t.Optional[dict]]):
-    """Paginator class for APIs returning a pagination token in the response body."""
-    
-    # maintains page count in a date range batch
-    _sub_page_count = 0
-
-    def __init__(
-        self,
-        jsonpath: str,
-        logger: logging.Logger,
-        *args: t.Any,
-        **kwargs: t.Any,
-    ) -> None:
-        """Create a new paginator.
-
-        Args:
-            jsonpath: A JSONPath expression.
-            args: Paginator positional arguments for base class.
-            kwargs: Paginator keyword arguments for base class.
-        """
-        super().__init__(None, *args, **kwargs)
-        self._jsonpath = jsonpath
-        self.logger = logger
-
-    @override
-    def get_next(self, response: requests.Response) -> dict | None:
-        """Get the next page token.
-
-        Args:
-            response: API response object.
-
-        Returns:
-            The next page token.
-        """
-        req_url = response.request.url
-        req_params = parse.parse_qs(parse.urlparse(req_url).query)
-        self.logger.debug("Params: {}".format(req_params))
-        last_from = req_params.get("from", [None])[0]
-        last_to = req_params.get("to", [None])[0]
-        
-        response_json = response.json()
-        response_page_count = response_json.get("page_count")
-        
-        last_page_in_batch = self._sub_page_count == response_page_count
-        
-        self._last_seen_record = {
-            "page_count":response_page_count,
-            "last_page_in_batch":last_page_in_batch,
-            "last_to":last_to,
-        }
-        
-        all_matches = extract_jsonpath(self._jsonpath, response_json)
-        next_page_token = next(all_matches, None)
-        
-        if not response_page_count and not next_page_token:
-            return None
-        
-        result = {
-            "next_page_token": next_page_token,
-            "last_from": last_from,
-            "last_to": last_to,
-            "last_page_in_batch": last_page_in_batch
-        }
-        
-        return result
-    
-    def advance(self, response):
-        if self._last_seen_record and self._last_seen_record["last_page_in_batch"]:
-            # reset to page 1 for new batch
-            self._sub_page_count = 1
-        else:
-            self._sub_page_count += 1
-        return super().advance(response)
-    
-    def has_more(self, response):
-        if self._last_seen_record and self._sub_page_count == self._last_seen_record.get("page_count") and self._last_seen_record.get("last_to"):
-            # to date is in future and we're on last page, no more records
-            last_to_datetime = datetime.fromisoformat(self._last_seen_record["last_to"])
-            return last_to_datetime < datetime.now(timezone.utc)
-        
-        return True

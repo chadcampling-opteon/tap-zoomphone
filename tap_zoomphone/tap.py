@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from singer_sdk import Tap
+import logging
+
+from singer_sdk import Tap, metrics
 from singer_sdk import typing as th  # JSON schema typing helpers
 
 from tap_zoomphone import streams
@@ -44,6 +46,19 @@ class TapZoomPhone(Tap):
             description="The earliest record date to sync",
         ),
     ).to_dict()
+
+    def configure_logging(self) -> None:
+        """Configure logging with metric exclusions for specific streams."""
+        super().configure_logging()
+        
+        # Get the metrics logger
+        metrics_logger = logging.getLogger(metrics.METRICS_LOGGER_NAME)
+        
+        # Add a filter to exclude metrics for call_history_path stream
+        exclusion_filter = metrics.MetricExclusionFilter(
+            tags={"stream": "call_history_path"}
+        )
+        metrics_logger.addFilter(exclusion_filter)
 
     def discover_streams(self) -> list[streams.ZoomPhoneStream]:
         """Return a list of discovered streams.
