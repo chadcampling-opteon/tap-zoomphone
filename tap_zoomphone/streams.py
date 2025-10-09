@@ -14,6 +14,12 @@ else:
 from dateutil.relativedelta import relativedelta
 
 from tap_zoomphone.client import ZoomPhoneStream
+from tap_zoomphone.pagination import (
+    TokenPaginationStrategy,
+    TokenBasedDateRangePaginationStrategy,
+    PageCountBasedDateRangePaginationStrategy,
+    SinglePageStrategy,
+)
 
 
 SCHEMAS_DIR = resources.files(__package__) / "schemas"
@@ -29,6 +35,10 @@ class UsersStream(ZoomPhoneStream):
     records_jsonpath = "$.users[*]"
     
     schema_filepath = SCHEMAS_DIR / "zoom_phone_users_schema.json"  # noqa: ERA001
+    
+    def get_pagination_strategy(self):
+        """Return the pagination strategy for this stream."""
+        return TokenPaginationStrategy(page_size=self._page_size)
 
 class SmsSessionsStream(ZoomPhoneStream):
     """Define custom stream."""
@@ -42,6 +52,15 @@ class SmsSessionsStream(ZoomPhoneStream):
     
     _history_window = relativedelta(months=6)
     
+    def get_pagination_strategy(self):
+        """Return the pagination strategy for this stream."""
+        return TokenBasedDateRangePaginationStrategy(
+            page_size=self._page_size,
+            history_window=self._history_window,
+            logger=self.logger,
+            stream=self
+        )
+    
 class CallHistoryStream(ZoomPhoneStream):
     """Define custom stream."""
 
@@ -54,6 +73,15 @@ class CallHistoryStream(ZoomPhoneStream):
     
     _page_size = 300
     _history_window = relativedelta(months=6)
+    
+    def get_pagination_strategy(self):
+        """Return the pagination strategy for this stream."""
+        return PageCountBasedDateRangePaginationStrategy(
+            page_size=self._page_size,
+            history_window=self._history_window,
+            logger=self.logger,
+            stream=self
+        )
     
     def get_child_context(self, record, context):
         return { "id": record["id"]}
@@ -72,6 +100,10 @@ class CallHistoryPathStream(ZoomPhoneStream):
     state_partitioning_keys = []
     _page_size = None
     _LOG_REQUEST_METRICS = False
+    
+    def get_pagination_strategy(self):
+        """Return the pagination strategy for this stream."""
+        return SinglePageStrategy()
 
     
     def get_url(self, context):
@@ -80,9 +112,11 @@ class CallHistoryPathStream(ZoomPhoneStream):
         return  f"{url}/{id}"
 
     def _log_metric(self, point):
+        """Override to disable all metrics logging."""
         pass
     
     def _write_request_duration_log(self, endpoint, response, context, extra_tags):
+        """Override to disable request duration logging."""
         pass
     
     def post_process(self, row, context = None):
