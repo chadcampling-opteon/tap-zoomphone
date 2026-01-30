@@ -452,7 +452,8 @@
               "abandoned",
               "system_blocked",
               "service_unavailable",
-              "unconnected"
+              "unconnected",
+              "connected_to_voicemail"
             ]
           },
           "result_reason": {
