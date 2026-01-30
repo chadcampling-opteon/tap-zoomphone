@@ -103,7 +103,8 @@
                 "abandoned",
                 "blocked",
                 "service_unavailable",
-                "unconnected"
+                "unconnected",
+                "connected_to_voicemail"
             ]
         },
         "caller_ext_id": {
